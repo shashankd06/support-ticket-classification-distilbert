@@ -1,6 +1,6 @@
 # Dataset decision and label interpretation
 
-BANKING77 was chosen because its fine-grained banking intent labels resemble routing categories in a support queue, and its size permits a meaningful baseline and small Transformer experiments. It is more challenging than classifying a few broad topics. Public source, CSV endpoints, metadata and the CC BY 4.0 license were verified through the browser; local row counts, duplicates and distributions remain unmeasured until preparation succeeds.
+BANKING77 was chosen because its fine-grained banking intent labels resemble routing categories in a support queue, and its size permits a meaningful baseline and small Transformer experiments. It is more challenging than classifying a few broad topics. Public source, CSV endpoints, metadata and the CC BY 4.0 license were verified before implementation. The completed local preparation run verified 10,003 official training rows, 3,080 test rows and 77 labels. After overlap and conflicting-label filtering, the shared partitions contain 7,296 training, 1,810 validation and 3,020 test examples. The [published audit](../reports/full/data_audit.json) records hashes, the source revision, duplicate counts and all per-class counts.
 
 ## What labels mean
 

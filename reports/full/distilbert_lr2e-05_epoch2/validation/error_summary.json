@@ -1,0 +1,81 @@
+{
+  "error_count": 454,
+  "top_confusions": [
+    {
+      "true": "card_delivery_estimate",
+      "predicted": "card_arrival",
+      "count": 15
+    },
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "disposable_card_limits",
+      "count": 15
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "why_verify_identity",
+      "count": 13
+    },
+    {
+      "true": "top_up_failed",
+      "predicted": "top_up_reverted",
+      "count": 12
+    },
+    {
+      "true": "top_up_by_bank_transfer_charge",
+      "predicted": "transfer_fee_charged",
+      "count": 11
+    },
+    {
+      "true": "exchange_rate",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 10
+    },
+    {
+      "true": "card_swallowed",
+      "predicted": "declined_cash_withdrawal",
+      "count": 10
+    },
+    {
+      "true": "get_physical_card",
+      "predicted": "change_pin",
+      "count": 9
+    },
+    {
+      "true": "lost_or_stolen_card",
+      "predicted": "card_arrival",
+      "count": 8
+    },
+    {
+      "true": "order_physical_card",
+      "predicted": "getting_spare_card",
+      "count": 8
+    },
+    {
+      "true": "exchange_charge",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 8
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "transfer_timing",
+      "count": 7
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 7
+    },
+    {
+      "true": "pending_top_up",
+      "predicted": "top_up_reverted",
+      "count": 6
+    },
+    {
+      "true": "supported_cards_and_currencies",
+      "predicted": "fiat_currency_support",
+      "count": 6
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

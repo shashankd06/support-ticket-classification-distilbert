@@ -1,0 +1,81 @@
+{
+  "error_count": 180,
+  "top_confusions": [
+    {
+      "true": "declined_transfer",
+      "predicted": "failed_transfer",
+      "count": 5
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 4
+    },
+    {
+      "true": "beneficiary_not_allowed",
+      "predicted": "failed_transfer",
+      "count": 4
+    },
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "getting_virtual_card",
+      "count": 4
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "pending_transfer",
+      "count": 3
+    },
+    {
+      "true": "unable_to_verify_identity",
+      "predicted": "why_verify_identity",
+      "count": 3
+    },
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "get_disposable_virtual_card",
+      "count": 3
+    },
+    {
+      "true": "wrong_exchange_rate_for_cash_withdrawal",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 3
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "unable_to_verify_identity",
+      "count": 3
+    },
+    {
+      "true": "card_arrival",
+      "predicted": "card_delivery_estimate",
+      "count": 2
+    },
+    {
+      "true": "extra_charge_on_statement",
+      "predicted": "card_payment_fee_charged",
+      "count": 2
+    },
+    {
+      "true": "pending_cash_withdrawal",
+      "predicted": "pending_card_payment",
+      "count": 2
+    },
+    {
+      "true": "fiat_currency_support",
+      "predicted": "supported_cards_and_currencies",
+      "count": 2
+    },
+    {
+      "true": "card_delivery_estimate",
+      "predicted": "card_arrival",
+      "count": 2
+    },
+    {
+      "true": "pending_top_up",
+      "predicted": "top_up_failed",
+      "count": 2
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

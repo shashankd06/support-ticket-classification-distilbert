@@ -1,0 +1,81 @@
+{
+  "error_count": 314,
+  "top_confusions": [
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "getting_virtual_card",
+      "count": 18
+    },
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "get_disposable_virtual_card",
+      "count": 16
+    },
+    {
+      "true": "why_verify_identity",
+      "predicted": "verify_my_identity",
+      "count": 10
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "why_verify_identity",
+      "count": 7
+    },
+    {
+      "true": "card_arrival",
+      "predicted": "card_delivery_estimate",
+      "count": 4
+    },
+    {
+      "true": "card_acceptance",
+      "predicted": "supported_cards_and_currencies",
+      "count": 4
+    },
+    {
+      "true": "declined_transfer",
+      "predicted": "declined_card_payment",
+      "count": 4
+    },
+    {
+      "true": "beneficiary_not_allowed",
+      "predicted": "failed_transfer",
+      "count": 4
+    },
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "getting_virtual_card",
+      "count": 4
+    },
+    {
+      "true": "balance_not_updated_after_bank_transfer",
+      "predicted": "transfer_not_received_by_recipient",
+      "count": 4
+    },
+    {
+      "true": "automatic_top_up",
+      "predicted": "top_up_limits",
+      "count": 3
+    },
+    {
+      "true": "top_up_by_bank_transfer_charge",
+      "predicted": "transfer_fee_charged",
+      "count": 3
+    },
+    {
+      "true": "wrong_amount_of_cash_received",
+      "predicted": "declined_cash_withdrawal",
+      "count": 3
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "transfer_timing",
+      "count": 3
+    },
+    {
+      "true": "top_up_reverted",
+      "predicted": "top_up_failed",
+      "count": 3
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

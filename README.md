@@ -2,7 +2,7 @@
 
 A manageable Python project for comparing a TF-IDF + logistic regression classifier with a fine-tuned DistilBERT model on banking support intents. The purpose is to demonstrate the whole experiment lifecycle, including honest negative results.
 
-**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. Real-model API serving remains unverified; the latest test rerun stalled and was interrupted, so no new API/test pass is claimed.
+**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. **Local real-model API serving is verified:** six tests passed without skips, and both trained backends passed 11 HTTP checks each. This is a locally served application, not a public or production deployment.
 
 ## Measured results
 
@@ -26,7 +26,11 @@ DistilBERT improved accuracy by **2.81 percentage points** and macro-F1 by **0.0
 
 Both DistilBERT learning-rate runs fine-tuned the encoder and classification head for three epochs, completing **1,368 optimizer steps per run**, with seed 42. Validation macro-F1 selected each model family's checkpoint; the selected models were then evaluated on the shared held-out test set. Saved reports include per-class precision/recall/F1, confusion matrices, and concrete misclassifications. Review checks confirmed that the final confusion matrices reproduce reported accuracy and error counts, saved duplicate-group IDs do not cross partitions, and label mappings agree.
 
-The measured values come from local `reports/full/final_comparison.json`, `baseline_experiments.json`, `transformer_experiments.json`, and the corresponding per-model metric files. Generated full reports have not been added to GitHub in this README-only update. Older committed experiment and resume documents describe the initial build and still need refreshing; the current training status and measured results are recorded here.
+The supporting evidence is published: [final comparison](reports/full/final_comparison.json), [baseline experiments](reports/full/baseline_experiments.json), [DistilBERT experiments](reports/full/transformer_experiments.json), [data audit](reports/full/data_audit.json), and [per-class metrics and confusion matrices](reports/README.md). The [experiment report](reports/EXPERIMENT_REPORT.md), [resume bullets](reports/RESUME_BULLETS.md), and [interview guide](docs/INTERVIEW_GUIDE.md) reflect these completed runs and their limitations.
+
+![DistilBERT final test confusion matrix](reports/full/distilbert_final_test/confusion_matrix.png)
+
+The [JSON matrix](reports/full/distilbert_final_test/confusion_matrix.json) maps the class IDs in the plot to canonical intent names.
 
 ## Dataset and attribution
 
@@ -71,7 +75,7 @@ python -m pytest -q
 
 For CPU, install PyTorch using the [official installation selector](https://pytorch.org/get-started/locally/) before the editable install. Training automatically uses CUDA when available. The completed full GPU run used batch size 8 with two accumulation steps, maximum 96 tokens, FP32, and no DataLoader workers. The CPU default is batch size 4. If GPU memory runs out on another machine, reduce `batch_size_cuda` to 4 or 2 before preparation and increase accumulation to preserve the effective batch. Do not change settings after seeing test results.
 
-Dependency ranges are in `pyproject.toml`. `reports/local_checks/environment.txt` records the actual environment used for completed offline checks; it is **not** a validated training lockfile. After a successful install, save `python -m pip freeze > requirements-lock.txt` for your training environment.
+Dependency ranges are in `pyproject.toml`. The [verification environment snapshot](reports/verification/requirements-environment.txt) records the installed versions used for the current tests and real-model serving checks, including CUDA PyTorch; it was captured after training, not reconstructed as an exact training lockfile. `reports/local_checks/environment.txt` is the historical CPU-only build environment. For future training runs, capture `python -m pip freeze > requirements-lock.txt` at run time. CUDA wheel installation still requires the appropriate PyTorch package index.
 
 ## Smoke mode: functionality, not model quality
 
@@ -137,9 +141,31 @@ python -m uvicorn ticketnlp.api:app --host 127.0.0.1 --port 8000
 Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/predict -ContentType 'application/json' -Body '{"text":"My card has not arrived yet"}'
 ```
 
-The response schema is `{label, score, model, mode, truncated}`. The score is the predicted class's softmax probability (DistilBERT) or logistic regression probability, **not calibrated confidence**. No sample numeric prediction is claimed here. `/docs` provides interactive API documentation; `/health` reports ready only after startup loads artifacts. Missing artifacts fail startup, and there is no silent model fallback. Load only trusted local joblib files.
+The response schema is `{label, score, model, mode, truncated}`. The score is the predicted class's softmax probability (DistilBERT) or logistic regression probability, **not calibrated confidence**. `/docs` provides interactive API documentation; `/health` reports ready only after startup loads artifacts. Missing artifacts fail startup, and there is no silent model fallback. Load only trusted local joblib files.
+
+The verified local DistilBERT server returned this response to the invented demonstration input `My card has not arrived yet.`:
+
+```json
+{"label":"card_arrival","score":0.844367265701294,"model":"distilbert","mode":"full","truncated":false}
+```
+
+This single example verifies inference behavior, not classification accuracy or calibrated confidence. See the [real-model HTTP verification summary](reports/inference_verification/summary.json) and [per-backend evidence](reports/README.md).
 
 Requests must contain a string with 1–4,000 characters and at least one non-whitespace character; invalid input returns HTTP 422. Whitespace is collapsed in training and serving. DistilBERT retains only the first `max_length` WordPiece tokens including special tokens (96 full / 64 smoke), and reports `truncated=true` when text exceeds that limit. Baseline uses all accepted input. Information near the end of a long ticket may be lost. The development API has no authentication, rate limits or production monitoring; keep it local.
+
+### Reproduce serving verification
+
+With trained artifacts in `artifacts/full`, run:
+
+```powershell
+python -m pytest -q -o faulthandler_timeout=30
+python -m scripts.verify_inference
+python -m scripts.verify_reports
+```
+
+The inference script loads existing trusted local checkpoints, starts temporary servers on `127.0.0.1`, verifies both model backends over actual HTTP, records reports, and stops the servers. It does not download weights or rerun model-quality evaluation. It checks readiness, OpenAPI, prediction schema, repeated requests, whitespace consistency, five invalid input cases, and acceptance of 4,000 characters with expected token truncation.
+
+The earlier test stall was traced to Windows asyncio creating a loopback socket (`socketpair`) before API startup in the restricted execution environment. The same suite passed with local socket access permitted; no application-code fix or dependency replacement was needed. Allow local loopback sockets when running the tests or server. The passing run has one upstream Starlette/httpx deprecation warning; see [test output](reports/verification/pytest.txt) and [JUnit evidence](reports/verification/pytest.xml).
 
 ## Limits and next steps
 
@@ -151,6 +177,8 @@ Concrete findings from the saved test errors:
 - **Related intent labels are confused.** DistilBERT predicts `verify_my_identity` for 10 `why_verify_identity` queries and makes the reverse error 7 times. Card-arrival queries are sometimes classified as delivery-estimate requests. Short messages may not provide enough context to distinguish these labels.
 - **High scores can still be wrong.** A query about the exchange rate applied to a transaction (`test-156`) receives the general `exchange_rate` label instead of `card_payment_wrong_exchange_rate`, with score approximately 0.918. This illustrates a mistake with a high score; it does not replace a calibration study.
 
-The initial offline verification recorded **5 tests passed and 1 API test module skipped**. A later test run in the training environment stalled and was interrupted; real-model API serving remains unverified. Next steps are to resolve that test stall, exercise the API with the trained model, and update the older interview/experiment/resume documents. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
+Current verification records **6 tests passed, no skips**, and **22 HTTP checks across the two trained backends**. Ten saved metric reports were independently checked against their confusion matrices, including all 77 classes' precision, recall, F1 and support. The historical `reports/local_checks/` files are retained for provenance and are superseded by [current verification](reports/README.md); their invented-fixture metrics are not dataset results.
+
+Potential next steps are calibration, unknown-intent handling, seed variability and latency/concurrency measurements. Public deployment and production readiness have not been established. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
 
 Implementation references: [Hugging Face sequence classification](https://huggingface.co/docs/transformers/tasks/sequence_classification), [DistilBERT](https://huggingface.co/docs/transformers/model_doc/distilbert), [PyTorch reproducibility](https://docs.pytorch.org/docs/stable/notes/randomness.html), [scikit-learn group splitting](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html), and [FastAPI lifespan](https://fastapi.tiangolo.com/advanced/events/).

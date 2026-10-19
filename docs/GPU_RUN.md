@@ -1,6 +1,6 @@
 # Run training on a GPU
 
-The included `scripts/train_gpu.ps1` is the local GPU script. Use the README setup commands first, activate the environment, check that `torch.cuda.is_available()` is true, then run the script from the project root. No GPU training completed during project creation because download execution was blocked by the approval-review service.
+The included `scripts/train_gpu.ps1` is the local GPU script. Use the README setup commands first, activate the environment, check that `torch.cuda.is_available()` is true, then run the script from the project root. Smoke and full GPU training have now completed on an RTX 3050 6GB using Python 3.10.11 and PyTorch 2.11.0+cu128; see the [published experiment report](../reports/EXPERIMENT_REPORT.md). Existing final results are preserved, and the `final` command refuses to overwrite them. Use these instructions for a fresh reproduction, not to repeatedly inspect test scores while tuning.
 
 ## Optional free notebook runtime
 
@@ -48,7 +48,7 @@ subprocess.run([sys.executable, '-m', 'ticketnlp.run', 'final',
 ```
 
 3. Save `reports/`, `artifacts/full/`, `data/raw/revision.txt`, and your environment lock to your own storage before the runtime expires. Checkpoints can be hundreds of MB. Keep them out of Git. The code saves the best checkpoint after validation, but does not resume optimizer state after interruption; rerun the affected training stage from the fixed seed if needed.
-4. Read the saved error examples, complete `reports/EXPERIMENT_REPORT.md`, and replace the résumé drafts only after measuring full results.
+4. Read the saved error examples and compare your reproduction with the published experiment report. Update any new claims only from the results you actually measured. The existing resume bullets describe the completed local run, not the unexecuted notebook procedure.
 
 ## Troubleshooting
 

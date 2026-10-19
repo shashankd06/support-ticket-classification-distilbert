@@ -1,0 +1,42 @@
+{
+  "config": {
+    "seed": 42,
+    "mode": "full",
+    "max_length": 96,
+    "epochs": 3,
+    "learning_rates": [
+      2e-05,
+      5e-05
+    ],
+    "batch_size_cuda": 8,
+    "batch_size_cpu": 4,
+    "gradient_accumulation": 2,
+    "baseline_C": [
+      1.0,
+      4.0
+    ],
+    "near_duplicate_threshold": 0.9
+  },
+  "runs": [
+    {
+      "model": "tfidf_logistic",
+      "C": 1.0,
+      "seed": 42,
+      "split": "validation",
+      "mode": "full",
+      "accuracy": 0.8281767955801105,
+      "macro_f1": 0.807447833573392,
+      "n": 1810
+    },
+    {
+      "model": "tfidf_logistic",
+      "C": 4.0,
+      "seed": 42,
+      "split": "validation",
+      "mode": "full",
+      "accuracy": 0.8657458563535911,
+      "macro_f1": 0.8550684360533121,
+      "n": 1810
+    }
+  ]
+}

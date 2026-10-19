@@ -1,0 +1,30 @@
+{
+  "normalized_duplicate_rows": 60,
+  "similarity_pairs": 1962,
+  "components": 11556,
+  "threshold": 0.9,
+  "train_rows_removed_for_test_overlap": 839,
+  "conflicting_components": 50,
+  "source_revision": "57ec275d8078af65b7731c2a98be812d844a6d6b",
+  "sha256": {
+    "train": "b06e26ac675513959a63135f11b94ea7786ed02da65db93a5650d8838cbc664b",
+    "test": "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d",
+    "LICENSE": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661"
+  },
+  "official_counts": {
+    "train": 10003,
+    "test": 3080
+  },
+  "mode": "full",
+  "seed": 42,
+  "split_counts": {
+    "train": 7296,
+    "validation": 1810,
+    "test": 3020
+  },
+  "training_rows_removed_for_conflicts_after_overlap": 58,
+  "test_rows_removed_for_conflicts": 60,
+  "attribution": "BANKING77, PolyAI / Casanueva et al. (2020), CC BY 4.0; filtered and repartitioned",
+  "source": "https://github.com/PolyAI-LDN/task-specific-datasets",
+  "limitations": "Lexical duplicate threshold; semantic paraphrases and within-test repetitions can remain; filtered results are not the original official benchmark."
+}

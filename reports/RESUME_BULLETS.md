@@ -1,6 +1,6 @@
-# Résumé bullets — drafts, training incomplete
+# Resume bullets based on verified work
 
-1. Implemented a modular support-intent classification project with TF-IDF/logistic regression and PyTorch/Hugging Face DistilBERT training workflows, shared duplicate-aware partitions, validation-based model selection, and per-class evaluation reporting; full-dataset training and metrics pending.
-2. Built a FastAPI inference interface with startup model loading, input validation and explicit truncation reporting; added focused leakage, label-mapping and preprocessing tests, with API runtime verification pending dependency installation.
+- Fine-tuned DistilBERT for 77 banking support intents using PyTorch and Hugging Face, achieving 89.60% accuracy and 0.8907 macro-F1 on 3,020 filtered held-out queries, improving macro-F1 by 0.0243 over a TF-IDF/logistic regression baseline.
+- Implemented duplicate-aware shared data partitions, validation-based experiment selection and per-class error analysis; verified a FastAPI service with trained models through 22 local HTTP checks across two backends and a six-test passing suite.
 
-These drafts describe implemented code, not completed training or deployment. Do not claim a performance improvement or measured full-dataset accuracy/F1 until the corresponding reports exist. The delivered offline test results are available in `local_checks/pytest.txt`; an API test skip is not an API pass.
+These bullets describe local training, evaluation and serving, not public deployment. Results are one seeded run on a filtered BANKING77 population. Checkpoints, raw datasets and text-bearing error files are excluded from Git. Evidence: [experiment report](EXPERIMENT_REPORT.md), [final results](full/final_comparison.json), [API checks](inference_verification/summary.json), [tests](verification/pytest.txt).

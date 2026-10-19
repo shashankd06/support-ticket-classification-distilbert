@@ -47,9 +47,12 @@ class Predictor:
         else:
             import torch
 
-            tokens = self.tokenizer(text, truncation=False, add_special_tokens=True)[
-                "input_ids"
-            ]
+            # Count the untruncated input for reporting only; the model receives
+            # the separately truncated encoding below. Avoid a misleading warning
+            # about sending this counting-only sequence through the model.
+            tokens = self.tokenizer(
+                text, truncation=False, add_special_tokens=True, verbose=False
+            )["input_ids"]
             truncated = len(tokens) > self.config["max_length"]
             inputs = self.tokenizer(
                 text,

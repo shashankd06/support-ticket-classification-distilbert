@@ -1,0 +1,37 @@
+{
+  "backend": "baseline",
+  "scope": "Local HTTP inference using trained full-mode artifacts; not deployment or a quality benchmark",
+  "checkpoint_sha256": "3963c79fa363f089a6dfd0dfd98233bdce07d95e95cb702fb5c41687c7866286",
+  "checks": [
+    "health_after_real_checkpoint_startup",
+    "openapi_route_available",
+    "real_prediction_schema_label_score_and_mode",
+    "repeat_request_stable",
+    "whitespace_preprocessing_consistent",
+    "reject_empty_422",
+    "reject_whitespace_only_422",
+    "reject_missing_422",
+    "reject_wrong_type_422",
+    "reject_over_character_limit_422",
+    "accepted_4000_chars_and_expected_token_truncation"
+  ],
+  "passed": true,
+  "startup_seconds": 3.967999999999847,
+  "example": {
+    "text": "My card has not arrived yet.",
+    "response": {
+      "label": "card_arrival",
+      "score": 0.1836474093257392,
+      "model": "baseline",
+      "mode": "full",
+      "truncated": false
+    }
+  },
+  "long_input_response": {
+    "label": "order_physical_card",
+    "score": 0.06534836211419247,
+    "model": "baseline",
+    "mode": "full",
+    "truncated": false
+  }
+}

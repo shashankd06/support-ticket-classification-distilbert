@@ -1,0 +1,24 @@
+{
+  "all_passed": true,
+  "python": "3.10.11",
+  "packages": {
+    "torch": "2.11.0+cu128",
+    "transformers": "4.57.6",
+    "scikit-learn": "1.7.2",
+    "fastapi": "0.146.0",
+    "starlette": "1.7.0",
+    "httpx": "0.28.1",
+    "uvicorn": "0.54.0"
+  },
+  "backends": [
+    {
+      "name": "baseline",
+      "checks_passed": 11
+    },
+    {
+      "name": "distilbert",
+      "checks_passed": 11
+    }
+  ],
+  "deployment": "Local loopback only; no public or production deployment performed"
+}

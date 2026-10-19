@@ -1,0 +1,81 @@
+{
+  "error_count": 742,
+  "top_confusions": [
+    {
+      "true": "wrong_exchange_rate_for_cash_withdrawal",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 23
+    },
+    {
+      "true": "request_refund",
+      "predicted": "Refund_not_showing_up",
+      "count": 20
+    },
+    {
+      "true": "verify_top_up",
+      "predicted": "top_up_failed",
+      "count": 18
+    },
+    {
+      "true": "getting_virtual_card",
+      "predicted": "getting_spare_card",
+      "count": 17
+    },
+    {
+      "true": "pending_transfer",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 17
+    },
+    {
+      "true": "exchange_rate",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 15
+    },
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "disposable_card_limits",
+      "count": 15
+    },
+    {
+      "true": "top_up_by_bank_transfer_charge",
+      "predicted": "transfer_fee_charged",
+      "count": 13
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 13
+    },
+    {
+      "true": "top_up_failed",
+      "predicted": "top_up_reverted",
+      "count": 13
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "why_verify_identity",
+      "count": 13
+    },
+    {
+      "true": "get_physical_card",
+      "predicted": "change_pin",
+      "count": 12
+    },
+    {
+      "true": "topping_up_by_card",
+      "predicted": "top_up_failed",
+      "count": 12
+    },
+    {
+      "true": "reverted_card_payment?",
+      "predicted": "pending_card_payment",
+      "count": 11
+    },
+    {
+      "true": "failed_transfer",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 11
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

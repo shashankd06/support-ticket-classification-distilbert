@@ -1,0 +1,81 @@
+{
+  "error_count": 368,
+  "top_confusions": [
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "disposable_card_limits",
+      "count": 15
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "why_verify_identity",
+      "count": 14
+    },
+    {
+      "true": "top_up_by_bank_transfer_charge",
+      "predicted": "transfer_fee_charged",
+      "count": 11
+    },
+    {
+      "true": "card_swallowed",
+      "predicted": "declined_cash_withdrawal",
+      "count": 11
+    },
+    {
+      "true": "card_delivery_estimate",
+      "predicted": "card_arrival",
+      "count": 10
+    },
+    {
+      "true": "top_up_failed",
+      "predicted": "top_up_reverted",
+      "count": 10
+    },
+    {
+      "true": "lost_or_stolen_card",
+      "predicted": "card_arrival",
+      "count": 8
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 7
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "transfer_timing",
+      "count": 6
+    },
+    {
+      "true": "topping_up_by_card",
+      "predicted": "top_up_failed",
+      "count": 6
+    },
+    {
+      "true": "topping_up_by_card",
+      "predicted": "top_up_by_cash_or_cheque",
+      "count": 6
+    },
+    {
+      "true": "beneficiary_not_allowed",
+      "predicted": "failed_transfer",
+      "count": 6
+    },
+    {
+      "true": "lost_or_stolen_card",
+      "predicted": "card_linking",
+      "count": 5
+    },
+    {
+      "true": "unable_to_verify_identity",
+      "predicted": "why_verify_identity",
+      "count": 5
+    },
+    {
+      "true": "pending_transfer",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 5
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

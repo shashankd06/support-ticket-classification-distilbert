@@ -2,46 +2,60 @@
 
 ## A truthful opening
 
-“I implemented a support-intent classification experiment using BANKING77, a TF-IDF/logistic regression baseline, a DistilBERT fine-tuning loop, shared leakage-controlled splits, and a small inference API. Offline tests passed for the portions available locally. Dataset training and API integration are pending because dependencies and model downloads were blocked in the build environment.”
+"I built a banking support-intent classifier using BANKING77. I compared a TF-IDF/logistic regression baseline with actual DistilBERT fine-tuning on a local GPU. I selected settings on validation macro-F1 and evaluated both models on the same filtered held-out set. DistilBERT reached 89.60% accuracy and 0.8907 macro-F1, versus 0.8664 macro-F1 for the baseline. I also verified the trained models through a local FastAPI service and analyzed where the Transformer still fails."
 
-Replace the final sentence only once you have run and inspected the real results. Do not present invented-fixture metrics as benchmark performance.
+Explain your actual role and any AI assistance honestly. Be ready to trace the code, reproduce a run, and change a setting yourself. Do not claim a publicly deployed or production-ready application.
 
 ## Why this problem and dataset?
 
-Routing a customer query to a support category is a concrete multiclass NLP task. Fine-grained banking categories expose ambiguity beyond broad topic classification. Dataset availability, official splits and licensing were checked before implementation. However, these are short customer intents, not complete support-ticket threads; the title describes an application use case rather than an exact production-data source.
+Customer-query routing is a practical multiclass NLP task. BANKING77 has 13,083 queries and 77 fine-grained intents; 77 is the number of classes, not examples. The source license is CC BY 4.0, with attribution and modification notices preserved. These are short single-turn English banking queries, not full support threads or a general-purpose ticket dataset.
 
-## Why start with TF-IDF?
+## How did you build it?
 
-TF-IDF emphasizes informative terms and bigrams; logistic regression is inexpensive, interpretable and often strong on constrained intents. A Transformer must earn its extra latency, memory and training cost. Sparse lexical features struggle with paraphrases or word order; their success on keywords makes the baseline a useful diagnostic. Fit vocabulary and IDF on training only.
+Verified the source, schema, license and official split; implemented lexical overlap auditing and shared partitions; trained the sparse baseline; fine-tuned DistilBERT using a small learning-rate comparison; selected checkpoints on validation; evaluated final test once; inspected per-class failures; and verified real-model local HTTP inference. Modules separate preparation, baseline, Transformer training, evaluation and inference. JSON configs and a fixed seed keep the project understandable without extra infrastructure.
 
-## What does fine-tuning change?
+## Why use a baseline?
 
-The pretrained DistilBERT encoder represents tokens using bidirectional self-attention. A randomly initialized 77-way classification head predicts routing intent. Cross-entropy backpropagates through the head and encoder; this is actual fine-tuning rather than frozen embeddings. The tokenizer is pretrained, and dynamic padding reduces wasted computation. Smaller batches plus accumulation manage GPU memory. DistilBERT trades some capacity for a smaller model than BERT; no performance advantage over this baseline is presumed.
+TF-IDF turns words and bigrams into sparse features, and logistic regression learns class probabilities. It is cheap and often strong for keyword-heavy intents. Vocabulary and IDF are fitted on training only. DistilBERT must justify extra training and inference cost with measured benefit. It improved overall accuracy by 2.81 percentage points and made 85 fewer errors, but the baseline was better on some classes.
 
-## How was leakage addressed?
+## What was actually fine-tuned?
 
-An identical query appearing in training and test can inflate reported performance. Normalize and group exact and close lexical matches before splitting. Any group touching official test is removed from official train; conflicting-label groups are quarantined; the remaining training groups form train and validation. Connected components enforce transitivity. Stateless hashing supports auditing without learning IDF from test. The audit is lexical, so explain that semantic paraphrases may remain and threshold choices can over-group. Test results on this filtered population are not directly comparable with published official-split results.
+The pretrained DistilBERT encoder and a randomly initialized 77-way classification head both receive cross-entropy gradients. This is not frozen embedding extraction or only calling a hosted pretrained API. Each learning rate ran three epochs and 1,368 optimizer steps, using batch 8, accumulation 2, maximum length 96, AdamW and FP32 on an RTX 3050 6GB GPU. The model checkpoint and tokenizer are saved locally and excluded from Git.
 
-## How are settings selected?
+## How did you avoid leakage?
 
-Two regularization values test baseline overfitting, and two learning rates test fine-tuning sensitivity. The best validation macro-F1 selects each family’s checkpoint, including the epoch. Test is reserved for the final comparison. One fixed seed is manageable but does not quantify run-to-run variability. If another experiment is motivated by looking at test errors, a fresh holdout is required to make an unbiased new claim.
+Normalize exact matches, then group character-ngram cosine matches at threshold 0.90 into connected components. A stateless hashing vectorizer audits overlap without fitting IDF on held-out text. Remove official training rows whose component touches test, quarantine conflicting-label components, and split remaining training groups into train and validation. The resulting counts are 7,296 / 1,810 / 3,020. Saved group IDs are disjoint. The audit cannot guarantee removal of every semantic paraphrase, can over-group, and changes the official population, so published benchmark comparisons are inappropriate.
 
-## Why macro-F1 and accuracy?
+## How did you choose settings?
 
-Macro-F1 gives each intent equal importance, averaging per-class F1 rather than pooling decisions across all examples. Accuracy gives the overall fraction correct. Per-class precision measures how often predictions for a class are correct; recall measures how many real examples of that class are recovered. Zero-division handling prevents undefined numbers for unpredicted classes. Support counts and a confusion matrix expose poor minority-class performance that one scalar can hide.
+Compare logistic regression C=1 versus C=4, and DistilBERT learning rates 2e-5 versus 5e-5. Select each family's checkpoint by validation macro-F1, including epoch selection. C=4 reached validation macro-F1 0.8551; LR 5e-5 at epoch 3 reached 0.8872. The selected models achieved test macro-F1 0.8664 and 0.8907 respectively. One seed does not establish statistical significance or capture run-to-run variability.
 
-## Which errors actually happened?
+## Why macro-F1 as well as accuracy?
 
-No BANKING77 model errors have been measured yet. Plausible review targets include arrival versus delivery estimate, pending versus failed transfer, and refund request versus missing refund. These are hypotheses, not findings. After a run, read the highest-count confusion pairs and at least 20 concrete examples, compare both models, and categorize lexical ambiguity, missing context, apparent labeling ambiguity, truncation, and true domain misunderstanding. Quote actual row IDs and counts in the report. A few examples do not establish a population-wide cause.
+Accuracy is the fraction of correct predictions. Macro-F1 averages each intent's F1 equally, making weak classes more visible. Per-class precision measures whether predictions for a label are correct; recall measures how many true examples are found. Support counts and confusion matrices reveal what an aggregate score hides. Ten saved metric reports were independently checked against their confusion matrices, including all 77 classes' precision, recall, F1 and support.
 
-## Is the API score confidence?
+## Which failures matter most?
 
-It is a model probability, not a guarantee of correctness. Neural softmax probabilities can be overconfident, especially for out-of-domain text. Calibration needs independent validation and measurement (e.g. reliability plots or expected calibration error); it is intentionally not claimed here. The service has no abstention policy and always selects one known intent. Adding an unknown class or calibrated rejection threshold is a useful future experiment.
+`virtual_card_not_working` has 23 training and 7 validation examples after filtering. DistilBERT recognizes only 2/39 test queries (F1 0.0976), versus the baseline's 14/39 (F1 0.5283). It confuses broken virtual cards with requests to obtain a virtual card: 18 go to `getting_virtual_card`, 16 to `get_disposable_virtual_card`. Sparse training coverage is a hypothesis for the weakness, not a proven cause.
+
+Identity verification also shows related-intent confusion: 10 why-verification queries become how-to-verify predictions, and 7 go the other way. Card arrival versus delivery estimate is ambiguous for short queries such as `test-5`. Some errors are partly about label granularity or missing context; do not describe every wrong label as proof of a single model flaw.
+
+## What does the score mean?
+
+The selected class's softmax or logistic regression probability, not calibrated confidence. Wrong predictions with scores above 0.9 occur in the saved error review. Calibration requires a separate quantitative study. There is no unknown-intent class or abstention threshold, so out-of-domain input still receives a banking label.
+
+## Is the application working?
+
+Yes, local serving has been verified with the actual saved checkpoints. Temporary Uvicorn servers loaded each model once at startup and received real HTTP requests. Both backends passed 11 checks covering readiness, OpenAPI, predictions, repeat requests, whitespace consistency, input errors and truncation; six focused unit tests passed without skips. The single-load behavior is also checked by a factory-counting unit test. This is not a public deployment, concurrency benchmark or production-readiness claim.
+
+An earlier test stall was traced to Windows asyncio creating a loopback socket in the restricted execution environment. The minimal client stalled before application startup; the same test suite passed when loopback sockets were allowed. Explain the environmental cause and the evidence, rather than claiming a model or application bug was fixed.
 
 ## What are the engineering tradeoffs?
 
-Explicit modules and a short PyTorch loop are easy to inspect. Files and JSON configs are sufficient for a small project; there is no experiment tracking server or distributed infrastructure. Startup loads weights once per process; synchronous request handling avoids blocking the async event loop with model work, but concurrency is not load-tested. Inputs have a 4,000-character limit, Transformers truncate by token length, and outputs disclose truncation and smoke/full mode. Production readiness would require security, rate limits, out-of-domain handling, drift checks and operational evaluation.
+Explicit modules, a short PyTorch loop and JSON configs are enough for this project. Loading weights once per server process avoids per-request downloads/loading. The API accepts 1-4,000 characters and rejects blank inputs; DistilBERT retains only the first 96 WordPiece tokens in full mode and reports truncation. The baseline uses all accepted text. The service is local-only and lacks authentication, rate limiting, monitoring and load testing.
 
 ## What would you improve next?
 
-First finish smoke and full runs and inspect errors. Then test seed variability, assess calibration, measure latency/VRAM, inspect near-duplicate threshold sensitivity and consider an out-of-domain holdout. Choose changes based on evidence rather than making the system larger by default.
+Assess calibration, unknown-intent handling, seed variability and inference performance. A class-weighted loss could be tested using validation, but no improvement is promised. The existing test set has now been inspected, so any further test-driven iteration is exploratory; a fresh untouched holdout is needed for an unbiased new improvement claim. The current measured result remains preserved.
+
+Evidence: [experiment report](../reports/EXPERIMENT_REPORT.md), [final comparison](../reports/full/final_comparison.json), [inference verification](../reports/inference_verification/summary.json), [test results](../reports/verification/pytest.txt).

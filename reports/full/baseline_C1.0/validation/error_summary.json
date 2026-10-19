@@ -1,0 +1,81 @@
+{
+  "error_count": 311,
+  "top_confusions": [
+    {
+      "true": "card_acceptance",
+      "predicted": "card_not_working",
+      "count": 5
+    },
+    {
+      "true": "unable_to_verify_identity",
+      "predicted": "why_verify_identity",
+      "count": 5
+    },
+    {
+      "true": "wrong_exchange_rate_for_cash_withdrawal",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 5
+    },
+    {
+      "true": "exchange_rate",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 4
+    },
+    {
+      "true": "transfer_fee_charged",
+      "predicted": "card_payment_fee_charged",
+      "count": 4
+    },
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "getting_virtual_card",
+      "count": 4
+    },
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "disposable_card_limits",
+      "count": 4
+    },
+    {
+      "true": "extra_charge_on_statement",
+      "predicted": "cash_withdrawal_charge",
+      "count": 3
+    },
+    {
+      "true": "card_delivery_estimate",
+      "predicted": "card_arrival",
+      "count": 3
+    },
+    {
+      "true": "lost_or_stolen_card",
+      "predicted": "card_arrival",
+      "count": 3
+    },
+    {
+      "true": "declined_card_payment",
+      "predicted": "reverted_card_payment?",
+      "count": 3
+    },
+    {
+      "true": "card_swallowed",
+      "predicted": "declined_cash_withdrawal",
+      "count": 3
+    },
+    {
+      "true": "beneficiary_not_allowed",
+      "predicted": "failed_transfer",
+      "count": 3
+    },
+    {
+      "true": "transfer_fee_charged",
+      "predicted": "cash_withdrawal_charge",
+      "count": 3
+    },
+    {
+      "true": "top_up_failed",
+      "predicted": "top_up_reverted",
+      "count": 3
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

@@ -1,0 +1,81 @@
+{
+  "error_count": 409,
+  "top_confusions": [
+    {
+      "true": "why_verify_identity",
+      "predicted": "unable_to_verify_identity",
+      "count": 16
+    },
+    {
+      "true": "get_disposable_virtual_card",
+      "predicted": "disposable_card_limits",
+      "count": 15
+    },
+    {
+      "true": "verify_my_identity",
+      "predicted": "unable_to_verify_identity",
+      "count": 15
+    },
+    {
+      "true": "order_physical_card",
+      "predicted": "getting_spare_card",
+      "count": 11
+    },
+    {
+      "true": "wrong_exchange_rate_for_cash_withdrawal",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 11
+    },
+    {
+      "true": "card_delivery_estimate",
+      "predicted": "card_arrival",
+      "count": 10
+    },
+    {
+      "true": "lost_or_stolen_card",
+      "predicted": "card_linking",
+      "count": 10
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "transfer_timing",
+      "count": 10
+    },
+    {
+      "true": "card_swallowed",
+      "predicted": "declined_cash_withdrawal",
+      "count": 10
+    },
+    {
+      "true": "direct_debit_payment_not_recognised",
+      "predicted": "card_payment_not_recognised",
+      "count": 9
+    },
+    {
+      "true": "topping_up_by_card",
+      "predicted": "top_up_failed",
+      "count": 7
+    },
+    {
+      "true": "topping_up_by_card",
+      "predicted": "top_up_by_cash_or_cheque",
+      "count": 7
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 6
+    },
+    {
+      "true": "balance_not_updated_after_bank_transfer",
+      "predicted": "transfer_timing",
+      "count": 6
+    },
+    {
+      "true": "fiat_currency_support",
+      "predicted": "exchange_via_app",
+      "count": 5
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

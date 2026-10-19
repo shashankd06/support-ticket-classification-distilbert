@@ -1,0 +1,15 @@
+{
+  "mode": "full",
+  "split": "final_test",
+  "baseline": {
+    "accuracy": 0.8678807947019868,
+    "macro_f1": 0.8663952076831931,
+    "n": 3020
+  },
+  "distilbert": {
+    "accuracy": 0.8960264900662251,
+    "macro_f1": 0.8907058374189074,
+    "n": 3020
+  },
+  "distilbert_macro_f1_delta": 0.024310629735714295
+}

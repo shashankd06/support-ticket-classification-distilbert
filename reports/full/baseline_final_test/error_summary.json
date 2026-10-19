@@ -1,0 +1,81 @@
+{
+  "error_count": 399,
+  "top_confusions": [
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "getting_virtual_card",
+      "count": 12
+    },
+    {
+      "true": "card_acceptance",
+      "predicted": "card_not_working",
+      "count": 10
+    },
+    {
+      "true": "virtual_card_not_working",
+      "predicted": "get_disposable_virtual_card",
+      "count": 7
+    },
+    {
+      "true": "wrong_exchange_rate_for_cash_withdrawal",
+      "predicted": "card_payment_wrong_exchange_rate",
+      "count": 6
+    },
+    {
+      "true": "contactless_not_working",
+      "predicted": "card_not_working",
+      "count": 5
+    },
+    {
+      "true": "pending_top_up",
+      "predicted": "top_up_failed",
+      "count": 5
+    },
+    {
+      "true": "top_up_reverted",
+      "predicted": "top_up_failed",
+      "count": 5
+    },
+    {
+      "true": "top_up_failed",
+      "predicted": "top_up_reverted",
+      "count": 5
+    },
+    {
+      "true": "card_arrival",
+      "predicted": "card_delivery_estimate",
+      "count": 4
+    },
+    {
+      "true": "pin_blocked",
+      "predicted": "get_physical_card",
+      "count": 4
+    },
+    {
+      "true": "transfer_not_received_by_recipient",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 4
+    },
+    {
+      "true": "card_payment_not_recognised",
+      "predicted": "extra_charge_on_statement",
+      "count": 4
+    },
+    {
+      "true": "pending_transfer",
+      "predicted": "balance_not_updated_after_bank_transfer",
+      "count": 4
+    },
+    {
+      "true": "pending_transfer",
+      "predicted": "transfer_timing",
+      "count": 4
+    },
+    {
+      "true": "balance_not_updated_after_bank_transfer",
+      "predicted": "transfer_not_received_by_recipient",
+      "count": 4
+    }
+  ],
+  "review_note": "Inspect errors.json manually before claiming linguistic failure patterns."
+}

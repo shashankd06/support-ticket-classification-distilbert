@@ -4,7 +4,7 @@
 
 "I built a banking support-intent classifier using BANKING77. I compared a TF-IDF/logistic regression baseline with actual DistilBERT fine-tuning on a local GPU. I selected settings on validation macro-F1 and evaluated both models on the same filtered held-out set. DistilBERT reached 89.60% accuracy and 0.8907 macro-F1, versus 0.8664 macro-F1 for the baseline. I also verified the trained models through a local FastAPI service and analyzed where the Transformer still fails."
 
-Explain your actual role and any AI assistance honestly. Be ready to trace the code, reproduce a run, and change a setting yourself. Do not claim a publicly deployed or production-ready application.
+Explain your actual role and any AI assistance honestly. Be ready to trace the code, reproduce a run, and change a setting yourself. You can demonstrate the verified public Render Free deployment; do not claim production readiness or measured throughput.
 
 ## Why this problem and dataset?
 
@@ -46,7 +46,7 @@ The selected class's softmax or logistic regression probability, not calibrated 
 
 ## Is the application working?
 
-Yes, local serving has been verified with the actual saved checkpoints. Temporary Uvicorn servers loaded each model once at startup and received real HTTP requests. Both backends passed 11 checks covering readiness, OpenAPI, predictions, repeat requests, whitespace consistency, input errors and truncation; eight Python/API tests passed without skips, alongside six fixture-based frontend state tests. The single-load behavior is also checked by a factory-counting unit test. This is not a public deployment, concurrency benchmark or production-readiness claim.
+Yes, local serving has been verified with the actual saved checkpoints. Temporary Uvicorn servers loaded each model once at startup and received real HTTP requests. Both backends passed 11 checks covering readiness, OpenAPI, predictions, repeat requests, whitespace consistency, input errors and truncation; eight Python/API tests passed without skips, alongside six fixture-based frontend state tests. The single-load behavior is also checked by a factory-counting unit test. The full DistilBERT app was subsequently deployed on Render Free and passed nine public HTTP checks, including real predictions and validation. See [deployment evidence](../reports/deployment/README.md). This is not a concurrency benchmark or production-readiness claim.
 
 An earlier test stall was traced to Windows asyncio creating a loopback socket in the restricted execution environment. The minimal client stalled before application startup; the same test suite passed when loopback sockets were allowed. Explain the environmental cause and the evidence, rather than claiming a model or application bug was fixed.
 

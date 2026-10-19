@@ -30,7 +30,7 @@ docker build -t intentdesk .
 docker run --rm -p 8000:10000 --memory=512m intentdesk
 ```
 
-The Docker daemon was not running in the build environment, so container build execution and a 512 MB memory-limit test have not been verified. Native Windows inference/browser checks are evidence for local functionality, not proof that a Linux container fits a hosting plan.
+The local Docker daemon was unavailable. Render subsequently built this Docker image and started the full model successfully on its Free instance. Nine public HTTP checks passed. This verifies the deployed container for sequential demo requests, not sustained load or peak-memory safety.
 
 ## Render
 
@@ -42,9 +42,9 @@ The repository includes a `render.yaml` for **one free Docker web service**, no 
 4. Create a Blueprint from the repository, review that the compute plan remains **free**, and apply it. The [Blueprint deployment link](https://dashboard.render.com/blueprint/new?repo=https://github.com/shashankd06/support-ticket-classification-distilbert) opens this configuration.
 5. Wait for an actual live deployment; inspect build/runtime logs, open `/`, `/health`, `/evaluation` and `/docs`, and submit at least two real `/predict` requests. Record the returned URL and checks before claiming deployment success.
 
-Render's [free plan](https://render.com/docs/free) has cold starts and resource limits; the [current compute reference](https://render.com/docs/compute-plans) lists 512 MB RAM for free web services. This PyTorch model's fit on that plan is unverified. If it runs out of memory, stop and report the constraint; do not upgrade or change/quantize the weights automatically. A live free deployment may sleep when idle, so demonstrate the API-unavailable/retry state honestly.
+Render's [free plan](https://render.com/docs/free) has cold starts and resource limits; the [current compute reference](https://render.com/docs/compute-plans) lists 512 MB RAM for free web services. This model started and served sequential demo requests on that plan; sustained memory stability and concurrent requests remain unverified. If it runs out of memory, stop and report the constraint; do not upgrade or change/quantize the weights automatically. A live free deployment may sleep when idle, so demonstrate the API-unavailable/retry state honestly.
 
-No public deployment is verified at the time these files were prepared. Installing a plugin alone does not establish an authenticated deployment or a live URL. Native Sites hosting cannot execute this PyTorch/FastAPI service; a disconnected static page would not satisfy the real-model demo requirement.
+Public deployment verified on 2026-10-19: [IntentDesk](https://intentdesk-banking-distilbert.onrender.com/). Render reported Live for source commit `07060e5207af935fcceff6733610a4b0ef79370c`; [saved evidence](../reports/deployment/README.md) includes actual HTTP responses, logs and screenshots. Documentation-only pushes do not redeploy the service. Native Sites hosting cannot execute this PyTorch/FastAPI service; a disconnected static page would not satisfy the real-model demo requirement.
 
 ## Verification
 

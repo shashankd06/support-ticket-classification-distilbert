@@ -2,7 +2,7 @@
 
 A manageable Python project for comparing a TF-IDF + logistic regression classifier with a fine-tuned DistilBERT model on banking support intents. The purpose is to demonstrate the whole experiment lifecycle, including honest negative results.
 
-**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. **Local real-model API serving is verified:** the current suite has eight Python/API tests and six frontend state tests passing, and both trained backends have passed 11 HTTP checks each. This is a locally served application, not a public or production deployment.
+**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. **Local real-model API serving is verified:** the current suite has eight Python/API tests and six frontend state tests passing, and both trained backends have passed 11 HTTP checks each. The public demo is now verified on Render's Free plan: [Open IntentDesk](https://intentdesk-banking-distilbert.onrender.com/). Nine public HTTP checks passed; this is a portfolio demo, not a production-readiness claim.
 
 ## Try IntentDesk locally
 
@@ -17,7 +17,7 @@ Open **http://127.0.0.1:8000/** for the interface. The default uses `artifacts/f
 
 [Desktop preview](reports/frontend/desktop.png) · [Mobile layout preview](reports/frontend/mobile.png) · [60–90-second demo script](docs/DEMO_SCRIPT.md) · [Frontend verification](reports/frontend/README.md)
 
-**Deployment:** a free-only Render Docker configuration and checksum-pinned model archive workflow are prepared. Public hosting is not yet verified; no live URL is claimed. The Docker daemon was unavailable locally, so container execution and the free service's memory fit are unverified. See [deployment instructions and current limits](docs/DEPLOYMENT.md). No paid compute is authorized or automatically selected.
+**Deployment:** [IntentDesk is live on Render](https://intentdesk-banking-distilbert.onrender.com/) using the full, unchanged DistilBERT checkpoint on a Free Docker service. The image built and startup completed; nine sequential public HTTP checks passed, including real predictions and input validation. See [deployment evidence](reports/deployment/README.md) and [instructions](docs/DEPLOYMENT.md). Free instances sleep when idle and can take 50 seconds or more to wake. Concurrency and sustained memory stability have not been benchmarked. No paid resources were selected.
 
 ## Measured results
 
@@ -196,6 +196,6 @@ Concrete findings from the saved test errors:
 
 Current verification records **8 Python/API tests and 6 frontend state tests passed**, plus **22 HTTP checks across the two trained backends**. See [frontend verification](reports/frontend/README.md) for the new tests and browser checks. Ten saved metric reports were independently checked against their confusion matrices, including all 77 classes' precision, recall, F1 and support. The historical `reports/local_checks/` files are retained for provenance and are superseded by [current verification](reports/README.md); their invented-fixture metrics are not dataset results.
 
-Potential next steps are calibration, unknown-intent handling, seed variability and latency/concurrency measurements. Public deployment and production readiness have not been established. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
+Potential next steps are calibration, unknown-intent handling, seed variability and latency/concurrency measurements. Public demo deployment is verified; production readiness has not been established. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
 
 Implementation references: [Hugging Face sequence classification](https://huggingface.co/docs/transformers/tasks/sequence_classification), [DistilBERT](https://huggingface.co/docs/transformers/model_doc/distilbert), [PyTorch reproducibility](https://docs.pytorch.org/docs/stable/notes/randomness.html), [scikit-learn group splitting](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html), and [FastAPI lifespan](https://fastapi.tiangolo.com/advanced/events/).

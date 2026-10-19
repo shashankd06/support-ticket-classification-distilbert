@@ -4,7 +4,7 @@
 
 Full BANKING77 preparation, baseline training, DistilBERT fine-tuning, validation selection and final test evaluation completed on a local NVIDIA RTX 3050 6GB Laptop GPU. Training used Python 3.10.11, PyTorch 2.11.0+cu128, seed 42, and the configuration in [full/config.json](full/config.json). Smoke mode also completed; its six-step Transformer run is a functionality check, not a model-quality result.
 
-Current verification: **8 Python/API tests and 6 frontend state tests passed**, plus **11 real HTTP inference checks per backend** for the saved baseline and DistilBERT. Serving was verified on localhost only. No public deployment, production readiness, throughput benchmark or calibration study is claimed.
+Current verification: **8 Python/API tests and 6 frontend state tests passed**, plus **11 real HTTP inference checks per backend** for the saved baseline and DistilBERT. Both backends were verified locally. The full DistilBERT demo was also deployed on Render Free and passed nine public HTTP checks; see [deployment evidence](deployment/README.md). No production readiness, throughput benchmark or calibration study is claimed.
 
 ## Dataset and partitions
 
@@ -80,4 +80,4 @@ The initial socket-enabled suite passed six tests; the frontend addition expande
 
 ## Next steps
 
-The application is locally served and verified, not publicly deployed or production-ready. Future work could assess calibration, unknown intents, run-to-run variance, latency and lexical-group threshold sensitivity. Class weighting is a plausible validation experiment, not an established improvement. Preserve the current final test results: after inspecting test errors, further tuning against them is exploratory and an unbiased new improvement claim needs a fresh holdout.
+The application is verified locally and publicly deployed as a Render Free portfolio demo; production readiness is not established. Future work could assess calibration, unknown intents, run-to-run variance, latency and lexical-group threshold sensitivity. Class weighting is a plausible validation experiment, not an established improvement. Preserve the current final test results: after inspecting test errors, further tuning against them is exploratory and an unbiased new improvement claim needs a fresh holdout.

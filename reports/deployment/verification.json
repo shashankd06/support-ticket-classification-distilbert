@@ -1,0 +1,100 @@
+{
+  "checked_at_utc": "2026-10-19T15:05:52.652237+00:00",
+  "url": "https://intentdesk-banking-distilbert.onrender.com",
+  "scope": "Sequential public demo checks; not load testing or model-quality evaluation",
+  "checks": [
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.454,
+      "passed": true
+    },
+    {
+      "path": "/health",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.343,
+      "passed": true
+    },
+    {
+      "path": "/evaluation",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.844,
+      "passed": true
+    },
+    {
+      "path": "/docs",
+      "method": "GET",
+      "status": 200,
+      "elapsed_seconds": 0.375,
+      "passed": true
+    },
+    {
+      "path": "/predict",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 0.5,
+      "passed": true
+    },
+    {
+      "path": "/predict",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 0.531,
+      "passed": true
+    },
+    {
+      "path": "/predict",
+      "method": "POST",
+      "status": 422,
+      "elapsed_seconds": 0.5,
+      "passed": true
+    },
+    {
+      "path": "/predict",
+      "method": "POST",
+      "status": 422,
+      "elapsed_seconds": 0.61,
+      "passed": true
+    },
+    {
+      "path": "/predict",
+      "method": "POST",
+      "status": 200,
+      "elapsed_seconds": 1.328,
+      "passed": true
+    }
+  ],
+  "predictions": [
+    {
+      "text": "My card has not arrived yet.",
+      "response": {
+        "label": "card_arrival",
+        "score": 0.8443676829338074,
+        "model": "distilbert",
+        "mode": "full",
+        "truncated": false
+      }
+    },
+    {
+      "text": "I need to cancel a bank transfer.",
+      "response": {
+        "label": "cancel_transfer",
+        "score": 0.9329684972763062,
+        "model": "distilbert",
+        "mode": "full",
+        "truncated": false
+      }
+    }
+  ],
+  "long_input_response": {
+    "label": "lost_or_stolen_card",
+    "score": 0.4390125870704651,
+    "model": "distilbert",
+    "mode": "full",
+    "truncated": true
+  },
+  "passed": true
+}

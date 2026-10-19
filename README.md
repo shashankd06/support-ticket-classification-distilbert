@@ -13,7 +13,7 @@ IntentDesk is the integrated recruiter-facing demo: warm, responsive HTML/CSS an
 python -m uvicorn ticketnlp.api:app --host 127.0.0.1 --port 8000
 ```
 
-Open **http://127.0.0.1:8000/** for the interface. The default uses `artifacts/full` and DistilBERT; `/docs` remains available. Model files are required locally and remain excluded from Git. The page provides three examples, input/error/loading states, an explicitly uncalibrated score, smoke/truncation notices, and results tied to their submitted query. Changing the input marks a previous result outdated; no fabricated prediction replaces an unavailable API.
+Open **http://127.0.0.1:8000/** for the interface. The default uses `artifacts/full` and DistilBERT; `/docs` remains available. Model files are required locally and remain excluded from Git. For a fresh clone, run `python deployment/fetch_model.py` once to install the pinned [released checkpoint](https://github.com/shashankd06/support-ticket-classification-distilbert/releases/tag/intentdesk-model-v1) before startup. The page provides three examples, input/error/loading states, an explicitly uncalibrated score, smoke/truncation notices, and results tied to their submitted query. Changing the input marks a previous result outdated; no fabricated prediction replaces an unavailable API.
 
 [Desktop preview](reports/frontend/desktop.png) · [Mobile layout preview](reports/frontend/mobile.png) · [60–90-second demo script](docs/DEMO_SCRIPT.md) · [Frontend verification](reports/frontend/README.md)
 

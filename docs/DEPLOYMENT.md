@@ -13,9 +13,13 @@ python -m uvicorn ticketnlp.api:app --host 127.0.0.1 --port 8000
 
 Open `http://127.0.0.1:8000/` for IntentDesk and `/docs` for the API schema. `MODEL_BACKEND=baseline` selects the locally trained sparse baseline; the default is DistilBERT. Smoke artifacts are identified explicitly in results if `MODEL_DIR=artifacts/smoke` is selected.
 
+For a fresh clone without trained artifacts, run `python deployment/fetch_model.py` once from the repository root to fetch the checksum-pinned released checkpoint before starting the server. It does not train a model.
+
 ## Container and model storage
 
 The Docker image installs CPU-only PyTorch and minimal serving dependencies, loads one full DistilBERT instance at startup and serves both UI and API. A pinned, checksum-verified archive is downloaded **during image build**, never per request. The archive contains unchanged original FP32 weights, tokenizer/configuration files and attribution/license notices, with no training queries or baseline pickle. Checkpoints are stored as a GitHub Release asset rather than committed into source history. `deployment/model-release.json` records the archive and original checkpoint SHA-256 values.
+
+The original model archive is published as [intentdesk-model-v1](https://github.com/shashankd06/support-ticket-classification-distilbert/releases/tag/intentdesk-model-v1); [publication evidence](../reports/frontend/model-release.json) records its digest and size. This release is a downloadable model artifact, not a running website.
 
 To package a new release from already trained files, preserve the upstream license in `deployment/LICENSE-BASE-MODEL.txt`, then run `python -m scripts.package_model`. This packages existing weights without retraining, quantization or final-test inference. Do not replace the release asset without changing its version/URL and pinned checksum.
 

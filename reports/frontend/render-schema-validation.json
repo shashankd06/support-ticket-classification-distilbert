@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "schema_url": "https://render.com/schema/render.yaml.json",
+  "schema_sha256": "95c37d7d8773f7670b13aa69e760b84b38dddccc3bd30bec8866fcc27d065776",
+  "configuration_sha256": "e6cb8e41f65b9c98a7a02667b5a4dff0e2cabf3fe694bb7c06324c785ee478b0",
+  "scope": "JSON Schema structure only; no authenticated platform validation, build, capacity or deployment verification",
+  "plan": "free"
+}

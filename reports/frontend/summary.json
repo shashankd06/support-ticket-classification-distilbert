@@ -1,0 +1,22 @@
+{
+  "python_api_tests_passed": 8,
+  "frontend_fixture_tests_passed": 6,
+  "browser_real_prediction_checks": [
+    "card_arrival",
+    "cancel_transfer",
+    "change_pin"
+  ],
+  "desktop_capture": "desktop.png",
+  "mobile_capture": "mobile.png",
+  "mobile_layout_client_width": 360,
+  "mobile_layout_scroll_width": 360,
+  "mobile_interaction_automation": "not verified; cross-frame control unavailable",
+  "weights_match_original_checkpoint_sha256": "3188e8f1747ce4658220cca6042cfdf1d76a07322320a93bef3331ec94b137b0",
+  "render_yaml_validation": "passed official JSON Schema; no authenticated platform validation",
+  "container_execution": "not run; Docker daemon unavailable",
+  "public_deployment": "pending; no live URL verified",
+  "retrained": false,
+  "final_test_evaluation_rerun": false,
+  "browser_api_unavailable_checked": true,
+  "model_release_published": true
+}

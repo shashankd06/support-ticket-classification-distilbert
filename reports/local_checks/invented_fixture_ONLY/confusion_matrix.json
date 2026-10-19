@@ -1,0 +1,16 @@
+{
+  "labels": [
+    "card_issue",
+    "transfer_issue"
+  ],
+  "matrix": [
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ]
+}

@@ -1,10 +1,16 @@
 import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 
 from .inference import Predictor
+
+STATIC = Path(__file__).parent / "static"
+EVALUATION = Path(__file__).resolve().parents[1] / "reports/full/final_comparison.json"
 
 
 class Ticket(BaseModel):
@@ -45,6 +51,18 @@ def create_app(predictor_factory=None):
         lifespan=lifespan,
         description="Scores are model probabilities, not calibrated confidence. English banking intents only.",
     )
+
+    app.mount("/assets", StaticFiles(directory=STATIC), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    def frontend():
+        return FileResponse(STATIC / "index.html", media_type="text/html")
+
+    @app.get("/evaluation", include_in_schema=False)
+    def evaluation():
+        if not EVALUATION.is_file():
+            raise HTTPException(status_code=503, detail="Evaluation report unavailable")
+        return FileResponse(EVALUATION, media_type="application/json")
 
     @app.post("/predict", response_model=Prediction)
     def predict(ticket: Ticket):

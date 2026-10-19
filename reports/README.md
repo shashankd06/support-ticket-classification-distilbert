@@ -13,8 +13,10 @@ Each validation experiment folder also contains per-class metrics, a labeled JSO
 
 ## Verification
 
+- [IntentDesk frontend verification](frontend/README.md): eight current Python/API tests, six frontend state tests, real browser predictions, desktop/mobile layout inspection and deployment boundaries.
+
 - [Metric integrity](verification/report_integrity.json): independent arithmetic checks for ten saved metric reports, 77 classes each.
-- [Passing tests](verification/pytest.txt) and [JUnit XML](verification/pytest.xml): six tests, no skips, one dependency deprecation warning.
+- [Initial API tests](verification/pytest.txt) and [JUnit XML](verification/pytest.xml): six tests, no skips, one dependency deprecation warning. The [current expanded suite](frontend/pytest.txt) contains eight passing Python/API tests.
 - [Real inference summary](inference_verification/summary.json), [baseline checks](inference_verification/baseline.json), [DistilBERT checks](inference_verification/distilbert.json), and corresponding server logs: 11 HTTP checks per trained backend, served only on localhost.
 - [Verification environment](verification/requirements-environment.txt): post-training environment snapshot, not a reconstructed exact training lockfile. CUDA wheels need the PyTorch index.
 

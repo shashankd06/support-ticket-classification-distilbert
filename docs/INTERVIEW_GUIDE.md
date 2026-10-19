@@ -46,7 +46,7 @@ The selected class's softmax or logistic regression probability, not calibrated 
 
 ## Is the application working?
 
-Yes, local serving has been verified with the actual saved checkpoints. Temporary Uvicorn servers loaded each model once at startup and received real HTTP requests. Both backends passed 11 checks covering readiness, OpenAPI, predictions, repeat requests, whitespace consistency, input errors and truncation; six focused unit tests passed without skips. The single-load behavior is also checked by a factory-counting unit test. This is not a public deployment, concurrency benchmark or production-readiness claim.
+Yes, local serving has been verified with the actual saved checkpoints. Temporary Uvicorn servers loaded each model once at startup and received real HTTP requests. Both backends passed 11 checks covering readiness, OpenAPI, predictions, repeat requests, whitespace consistency, input errors and truncation; eight Python/API tests passed without skips, alongside six fixture-based frontend state tests. The single-load behavior is also checked by a factory-counting unit test. This is not a public deployment, concurrency benchmark or production-readiness claim.
 
 An earlier test stall was traced to Windows asyncio creating a loopback socket in the restricted execution environment. The minimal client stalled before application startup; the same test suite passed when loopback sockets were allowed. Explain the environmental cause and the evidence, rather than claiming a model or application bug was fixed.
 
@@ -58,4 +58,4 @@ Explicit modules, a short PyTorch loop and JSON configs are enough for this proj
 
 Assess calibration, unknown-intent handling, seed variability and inference performance. A class-weighted loss could be tested using validation, but no improvement is promised. The existing test set has now been inspected, so any further test-driven iteration is exploratory; a fresh untouched holdout is needed for an unbiased new improvement claim. The current measured result remains preserved.
 
-Evidence: [experiment report](../reports/EXPERIMENT_REPORT.md), [final comparison](../reports/full/final_comparison.json), [inference verification](../reports/inference_verification/summary.json), [test results](../reports/verification/pytest.txt).
+Evidence: [experiment report](../reports/EXPERIMENT_REPORT.md), [final comparison](../reports/full/final_comparison.json), [inference verification](../reports/inference_verification/summary.json), [test results](../reports/frontend/pytest.txt).

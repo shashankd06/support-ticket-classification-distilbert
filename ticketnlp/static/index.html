@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ef">
+  <meta name="description" content="IntentDesk — try a fine-tuned DistilBERT banking intent classifier and explore its measured results.">
+  <title>IntentDesk — A clearer route for every query</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#classifier">Skip to classifier</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a href="#" class="wordmark" aria-label="IntentDesk home"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i></span>IntentDesk<span class="wordmark-dot">.</span></a>
+      <nav aria-label="Main navigation"><a href="#evaluation">View evaluation</a><a class="github-link" href="https://github.com/shashankd06/support-ticket-classification-distilbert" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></nav>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="intro-title">
+        <div class="intro-copy">
+          <p class="eyebrow"><span class="small-rule" aria-hidden="true"></span> A portfolio demonstration</p>
+          <h1 id="intro-title">A clearer route for<br>every banking query.</h1>
+          <p class="intro-description">A short message. One of 77 intents. Explore how a fine-tuned language model turns a banking question into a support category.</p>
+        </div>
+        <div class="intro-note"><span class="note-number">01 /</span><p>Banking query classification<br><strong>with DistilBERT</strong></p><span class="note-caption">Trained locally. Evaluated honestly.</span></div>
+      </section>
+
+      <section id="classifier" class="classifier" aria-labelledby="classifier-title">
+        <div class="section-topline"><h2 id="classifier-title">Try the classifier</h2><span id="api-status" class="api-status" role="status"><span class="status-dot" aria-hidden="true"></span><span id="api-status-text">Checking API</span></span></div>
+        <div class="classifier-grid">
+          <form id="query-form" class="composer" novalidate>
+            <div class="field-heading"><label for="query">Your banking query</label><span class="field-tag">English · single intent</span></div>
+            <textarea id="query" name="text" maxlength="4000" rows="6" placeholder="My card hasn’t arrived yet. How can I check where it is?" aria-describedby="query-help query-error" required></textarea>
+            <div class="field-footer"><span id="query-help">Use a short, specific query. Avoid personal information.</span><span id="character-count">0 / 4,000</span></div>
+            <p id="query-error" class="error-message" role="alert" hidden></p>
+            <div class="examples"><span class="examples-label">Or start with an example</span><div class="example-buttons"><button type="button" class="example" data-example="My card has not arrived yet.">Card delivery <span aria-hidden="true">↗</span></button><button type="button" class="example" data-example="I need to cancel a bank transfer.">Bank transfer <span aria-hidden="true">↗</span></button><button type="button" class="example" data-example="How do I change my card PIN?">Card security <span aria-hidden="true">↗</span></button></div></div>
+            <div class="submit-row"><button class="primary-button" id="classify-button" type="submit"><span class="button-spinner" aria-hidden="true" hidden></span><span id="button-label">Classify query</span><span class="button-arrow" aria-hidden="true">→</span></button><span class="keyboard-hint">Ctrl / ⌘ + Enter</span></div>
+            <p class="input-note">Your query is sent to this app’s classifier. This demo has no query-history database.</p>
+          </form>
+
+          <aside class="result-panel" aria-labelledby="result-title" aria-busy="false">
+            <div class="result-heading"><h3 id="result-title">Classification</h3><span class="result-index" aria-hidden="true">↳</span></div>
+            <div id="result-empty" class="result-empty"><div class="route-symbol" aria-hidden="true"><span></span><i></i><b>↗</b></div><h4>A message in.<br>A direction out.</h4><p>Write a query or choose an example.<br>Your model’s prediction will appear here.</p></div>
+            <div id="result-content" hidden>
+              <div id="result-state" class="result-state">Prediction</div>
+              <p class="intent-label" id="intent-label"></p>
+              <code class="canonical-label" id="canonical-label"></code>
+              <div class="score-block"><div><span class="metric-label">Model score</span><strong id="model-score"></strong></div><span class="score-note">Uncalibrated<br>model probability</span></div>
+              <div class="model-details"><span>Model</span><strong id="model-name"></strong></div>
+              <div id="mode-notice" class="mode-notice"></div>
+              <p id="truncation-notice" class="notice" hidden>Only the beginning of this query was used. The input exceeded the model’s token limit.</p>
+              <div class="submitted-query"><span class="metric-label">Submitted query</span><p id="submitted-query"></p></div>
+              <p class="result-caution">A high score does not guarantee the right intent.</p>
+            </div>
+            <p id="request-status" class="request-status" role="status" aria-live="polite"></p>
+          </aside>
+        </div>
+      </section>
+
+      <section id="evaluation" class="evaluation section-block" aria-labelledby="evaluation-title">
+        <div class="section-intro"><div><p class="eyebrow">02 / The evidence</p><h2 id="evaluation-title">Measured against a baseline.</h2></div><p>A language model should earn its complexity.<br>Both models were evaluated on the same held-out queries.</p></div>
+        <p id="evaluation-status" class="evaluation-status" role="status">Loading the committed evaluation report…</p>
+        <div class="evaluation-card">
+          <table><caption class="sr-only">Full-training final test results from the committed evaluation report</caption><thead><tr><th scope="col">Model</th><th scope="col">Accuracy</th><th scope="col">Macro-F1</th></tr></thead><tbody><tr><th scope="row"><span class="table-model">TF-IDF + logistic regression</span><span class="table-description">A strong, inexpensive baseline</span></th><td id="baseline-accuracy">—</td><td id="baseline-f1">—</td></tr><tr class="featured-row"><th scope="row"><span class="table-model">Fine-tuned DistilBERT <span class="model-badge">Transformer</span></span><span class="table-description">Selected using validation macro-F1</span></th><td id="distilbert-accuracy">—</td><td id="distilbert-f1">—</td></tr></tbody></table>
+          <div class="evaluation-foot"><p id="evaluation-context">Final held-out evaluation · one seeded experiment</p><span id="f1-delta" class="delta">— macro-F1</span></div>
+        </div>
+        <div class="evaluation-notes"><p>Duplicates and conflicting-label groups were filtered before evaluation. These results are not directly comparable with published unfiltered BANKING77 benchmarks. One run does not establish statistical significance.</p><div><a href="https://github.com/shashankd06/support-ticket-classification-distilbert/blob/main/reports/EXPERIMENT_REPORT.md" target="_blank" rel="noopener noreferrer">Experiment report ↗</a><a href="https://github.com/shashankd06/support-ticket-classification-distilbert/blob/main/reports/README.md" target="_blank" rel="noopener noreferrer">Detailed metrics ↗</a></div></div>
+      </section>
+
+      <section class="details section-block" aria-labelledby="details-title">
+        <div class="section-intro"><div><p class="eyebrow">03 / The boundaries</p><h2 id="details-title">Useful, with limitations.</h2></div><p>A routing prediction is a starting point.<br>Context and careful evaluation still matter.</p></div>
+        <div class="details-grid"><div class="scope-details"><h3>What this demo knows</h3><ul><li>Short English banking queries only.</li><li>One label from 77 known intents.</li><li>No unknown-intent rejection.</li><li>Scores are not calibrated confidence.</li><li>Closely related intents can be confused.</li></ul></div><article class="failure-note"><p class="eyebrow">An observed failure pattern</p><h3>A broken virtual card<br>isn’t a request for a new one.</h3><p>Yet the model often confuses the two. It recognized only <strong>2 of 39</strong> virtual-card troubleshooting queries in the test set. Just 23 training examples remained for that intent after filtering.</p><a href="https://github.com/shashankd06/support-ticket-classification-distilbert/blob/main/reports/EXPERIMENT_REPORT.md#observed-errors-and-limitations" target="_blank" rel="noopener noreferrer">Read the error analysis <span aria-hidden="true">↗</span></a></article></div>
+      </section>
+
+      <section class="project-note" aria-labelledby="project-title"><span class="note-number" aria-hidden="true">↳</span><div><h2 id="project-title">Small application. Complete experiment.</h2><p>Built with PyTorch, Hugging Face Transformers, and FastAPI. Trained on <a href="https://github.com/PolyAI-LDN/task-specific-datasets" target="_blank" rel="noopener noreferrer">BANKING77 by PolyAI / Casanueva et al. (2020)</a>, under CC BY 4.0, with overlap filtering and a validation split. Based on <a href="https://huggingface.co/distilbert/distilbert-base-uncased" target="_blank" rel="noopener noreferrer">DistilBERT</a>, licensed under Apache-2.0.</p></div><a href="/docs" class="api-docs">API docs ↗</a></section>
+    </main>
+    <footer><a href="#" class="footer-wordmark">IntentDesk.</a><p>Banking query classification with DistilBERT</p><span>Built to explore. Backed by evidence.</span></footer>
+  </div>
+</body>
+</html>

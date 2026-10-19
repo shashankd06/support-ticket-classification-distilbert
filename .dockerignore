@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!ticketnlp/
+!ticketnlp/**
+ticketnlp/**/__pycache__/
+!deployment/
+!deployment/**
+!reports/
+!reports/full/
+!reports/full/final_comparison.json

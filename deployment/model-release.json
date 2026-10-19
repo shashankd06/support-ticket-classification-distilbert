@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/shashankd06/support-ticket-classification-distilbert/releases/download/intentdesk-model-v1/distilbert-full.tar.gz",
+  "sha256": "9adb9621fe46ca03aa8b0648abc8e49cb71935821cc4074cecfe20086104067c",
+  "checkpoint_sha256": "3188e8f1747ce4658220cca6042cfdf1d76a07322320a93bef3331ec94b137b0",
+  "mode": "full",
+  "note": "Original FP32 trained weights; no quantization or retraining"
+}

@@ -1,0 +1,6 @@
+# Minimal CPU-only serving environment; training dependencies stay in pyproject.toml.
+fastapi==0.146.0
+uvicorn==0.54.0
+transformers==4.57.6
+numpy==2.2.6
+safetensors==0.8.0

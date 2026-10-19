@@ -1,0 +1,12 @@
+# Free plan only. Never automatically upgrade this portfolio demonstration.
+services:
+  - type: web
+    name: intentdesk-banking-distilbert
+    runtime: docker
+    plan: free
+    repo: https://github.com/shashankd06/support-ticket-classification-distilbert
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeploy: false

@@ -4,7 +4,7 @@
 
 Full BANKING77 preparation, baseline training, DistilBERT fine-tuning, validation selection and final test evaluation completed on a local NVIDIA RTX 3050 6GB Laptop GPU. Training used Python 3.10.11, PyTorch 2.11.0+cu128, seed 42, and the configuration in [full/config.json](full/config.json). Smoke mode also completed; its six-step Transformer run is a functionality check, not a model-quality result.
 
-Current verification: **6 tests passed, none skipped**, plus **11 real HTTP inference checks per backend** for the saved baseline and DistilBERT. Serving was verified on localhost only. No public deployment, production readiness, throughput benchmark or calibration study is claimed.
+Current verification: **8 Python/API tests and 6 frontend state tests passed**, plus **11 real HTTP inference checks per backend** for the saved baseline and DistilBERT. Serving was verified on localhost only. No public deployment, production readiness, throughput benchmark or calibration study is claimed.
 
 ## Dataset and partitions
 
@@ -76,7 +76,7 @@ The [real-model verification script](../scripts/verify_inference.py) starts sepa
 
 For the invented demonstration message, "My card has not arrived yet.", the trained DistilBERT returned `card_arrival` with score 0.844367; the baseline returned `card_arrival` with score 0.183647. These are inference examples, not additional quality evaluations. Probabilities are not calibrated or directly comparable confidence measures across model families.
 
-See [test output](verification/pytest.txt), [JUnit results](verification/pytest.xml), [inference summary](inference_verification/summary.json), and per-backend reports/logs in that folder. The [verification environment snapshot](verification/requirements-environment.txt) was captured after training and is not an independently recovered exact training lockfile; CUDA wheels require the appropriate PyTorch index.
+The initial socket-enabled suite passed six tests; the frontend addition expanded this to eight Python/API tests, with six separate fixture-based frontend state tests. See [current test output](frontend/pytest.txt), [current JUnit results](frontend/pytest.xml), [frontend verification](frontend/README.md), [inference summary](inference_verification/summary.json), and per-backend reports/logs in that folder. The [verification environment snapshot](verification/requirements-environment.txt) was captured after training and is not an independently recovered exact training lockfile; CUDA wheels require the appropriate PyTorch index.
 
 ## Next steps
 

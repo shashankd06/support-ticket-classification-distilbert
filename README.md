@@ -1,8 +1,23 @@
-# Support Ticket Classification with DistilBERT
+# IntentDesk — Support Ticket Classification with DistilBERT
 
 A manageable Python project for comparing a TF-IDF + logistic regression classifier with a fine-tuned DistilBERT model on banking support intents. The purpose is to demonstrate the whole experiment lifecycle, including honest negative results.
 
-**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. **Local real-model API serving is verified:** six tests passed without skips, and both trained backends passed 11 HTTP checks each. This is a locally served application, not a public or production deployment.
+**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. **Local real-model API serving is verified:** the current suite has eight Python/API tests and six frontend state tests passing, and both trained backends have passed 11 HTTP checks each. This is a locally served application, not a public or production deployment.
+
+## Try IntentDesk locally
+
+IntentDesk is the integrated recruiter-facing demo: warm, responsive HTML/CSS and plain JavaScript served by the existing FastAPI app, with real same-origin `/predict` requests and evaluation figures read from the committed final comparison. There is no frontend framework or Node build step.
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+python -m uvicorn ticketnlp.api:app --host 127.0.0.1 --port 8000
+```
+
+Open **http://127.0.0.1:8000/** for the interface. The default uses `artifacts/full` and DistilBERT; `/docs` remains available. Model files are required locally and remain excluded from Git. The page provides three examples, input/error/loading states, an explicitly uncalibrated score, smoke/truncation notices, and results tied to their submitted query. Changing the input marks a previous result outdated; no fabricated prediction replaces an unavailable API.
+
+[Desktop preview](reports/frontend/desktop.png) · [Mobile layout preview](reports/frontend/mobile.png) · [60–90-second demo script](docs/DEMO_SCRIPT.md) · [Frontend verification](reports/frontend/README.md)
+
+**Deployment:** a free-only Render Docker configuration and checksum-pinned model archive workflow are prepared. Public hosting is not yet verified; no live URL is claimed. The Docker daemon was unavailable locally, so container execution and the free service's memory fit are unverified. See [deployment instructions and current limits](docs/DEPLOYMENT.md). No paid compute is authorized or automatically selected.
 
 ## Measured results
 
@@ -161,6 +176,8 @@ With trained artifacts in `artifacts/full`, run:
 python -m pytest -q -o faulthandler_timeout=30
 python -m scripts.verify_inference
 python -m scripts.verify_reports
+# Optional Node-only frontend state tests (not needed to run the app):
+node --test tests/frontend.test.cjs
 ```
 
 The inference script loads existing trusted local checkpoints, starts temporary servers on `127.0.0.1`, verifies both model backends over actual HTTP, records reports, and stops the servers. It does not download weights or rerun model-quality evaluation. It checks readiness, OpenAPI, prediction schema, repeated requests, whitespace consistency, five invalid input cases, and acceptance of 4,000 characters with expected token truncation.
@@ -177,7 +194,7 @@ Concrete findings from the saved test errors:
 - **Related intent labels are confused.** DistilBERT predicts `verify_my_identity` for 10 `why_verify_identity` queries and makes the reverse error 7 times. Card-arrival queries are sometimes classified as delivery-estimate requests. Short messages may not provide enough context to distinguish these labels.
 - **High scores can still be wrong.** A query about the exchange rate applied to a transaction (`test-156`) receives the general `exchange_rate` label instead of `card_payment_wrong_exchange_rate`, with score approximately 0.918. This illustrates a mistake with a high score; it does not replace a calibration study.
 
-Current verification records **6 tests passed, no skips**, and **22 HTTP checks across the two trained backends**. Ten saved metric reports were independently checked against their confusion matrices, including all 77 classes' precision, recall, F1 and support. The historical `reports/local_checks/` files are retained for provenance and are superseded by [current verification](reports/README.md); their invented-fixture metrics are not dataset results.
+Current verification records **8 Python/API tests and 6 frontend state tests passed**, plus **22 HTTP checks across the two trained backends**. See [frontend verification](reports/frontend/README.md) for the new tests and browser checks. Ten saved metric reports were independently checked against their confusion matrices, including all 77 classes' precision, recall, F1 and support. The historical `reports/local_checks/` files are retained for provenance and are superseded by [current verification](reports/README.md); their invented-fixture metrics are not dataset results.
 
 Potential next steps are calibration, unknown-intent handling, seed variability and latency/concurrency measurements. Public deployment and production readiness have not been established. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
 

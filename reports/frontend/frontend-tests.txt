@@ -1,0 +1,14 @@
+✔ empty and excessive inputs are rejected before requesting a prediction (16.3446ms)
+✔ pending input edits cannot associate the old result with the new query (1.9963ms)
+✔ unavailable API never fabricates predictions and supports retry (0.9787ms)
+✔ smoke mode, truncation and user/output text remain explicit and safe (0.8996ms)
+✔ 422 and malformed responses show errors rather than predictions (2.3787ms)
+✔ evaluation is rendered from the actual committed report (4.1773ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.0396

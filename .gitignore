@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+data/
+artifacts/
+.cache/
+.env*
+*.safetensors
+*.bin
+*.pt
+*.joblib
+*.zip
+reports/**/*predictions.json
+reports/**/*errors.json

@@ -2,13 +2,37 @@
 
 A manageable Python project for comparing a TF-IDF + logistic regression classifier with a fine-tuned DistilBERT model on banking support intents. The purpose is to demonstrate the whole experiment lifecycle, including honest negative results.
 
-**Current status:** code implemented; offline verification results are in `reports/local_checks`. No BANKING77 training or pretrained-model download completed in this environment. No benchmark metrics or model winner are claimed. FastAPI and Transformer checks require installing the dependencies. See `reports/EXPERIMENT_REPORT.md` for the exact boundary between completed and pending work.
+**Current status:** smoke and full training completed, including actual pretrained DistilBERT fine-tuning on a local NVIDIA GPU. On the common filtered test set of **3,020 queries across 77 intents**, DistilBERT achieved **89.60% accuracy and 0.8907 macro-F1**, compared with **86.79% accuracy and 0.8664 macro-F1** for TF-IDF + logistic regression. Real-model API serving remains unverified; the latest test rerun stalled and was interrupted, so no new API/test pass is claimed.
+
+## Measured results
+
+These are **full-training final test results**, reviewed from saved local reports on 2026-10-19. Smoke-mode and invented-fixture scores are excluded.
+
+| Model | Test accuracy | Test macro-F1 | Correct / total | Errors |
+|---|---:|---:|---:|---:|
+| TF-IDF + logistic regression | 86.79% | 0.8664 | 2,621 / 3,020 | 399 |
+| Fine-tuned DistilBERT | **89.60%** | **0.8907** | **2,706 / 3,020** | **314** |
+
+DistilBERT improved accuracy by **2.81 percentage points** and macro-F1 by **0.0243**, making **85 fewer errors**. This is one seeded experiment on a filtered population, not a statistical significance claim or a direct comparison with published unfiltered BANKING77 benchmarks.
+
+### Experiments and checkpoint selection
+
+| Model / setting | Validation accuracy | Validation macro-F1 |
+|---|---:|---:|
+| Logistic regression, C=1 | 82.82% | 0.8074 |
+| Logistic regression, C=4 — selected | 86.57% | 0.8551 |
+| DistilBERT, LR 2e-5, epoch 3 | 79.67% | 0.7304 |
+| DistilBERT, LR 5e-5, epoch 3 — selected | **90.06%** | **0.8872** |
+
+Both DistilBERT learning-rate runs fine-tuned the encoder and classification head for three epochs, completing **1,368 optimizer steps per run**, with seed 42. Validation macro-F1 selected each model family's checkpoint; the selected models were then evaluated on the shared held-out test set. Saved reports include per-class precision/recall/F1, confusion matrices, and concrete misclassifications. Review checks confirmed that the final confusion matrices reproduce reported accuracy and error counts, saved duplicate-group IDs do not cross partitions, and label mappings agree.
+
+The measured values come from local `reports/full/final_comparison.json`, `baseline_experiments.json`, `transformer_experiments.json`, and the corresponding per-model metric files. Generated full reports have not been added to GitHub in this README-only update. Older committed experiment and resume documents describe the initial build and still need refreshing; the current training status and measured results are recorded here.
 
 ## Dataset and attribution
 
 Use [BANKING77 from PolyAI](https://github.com/PolyAI-LDN/task-specific-datasets), introduced by Casanueva, Temcinas, Gerz, Henderson, and Vulić, *Efficient Intent Detection with Dual Sentence Encoders*, 2020 ([paper](https://arxiv.org/abs/2003.04807)). The upstream repository lists 10,003 train and 3,080 test customer queries, across 77 fine-grained English online-banking intents. This is customer-intent routing, a proxy for ticket classification, not a collection of complete support threads.
 
-The actual upstream CSV URLs were reachable through web inspection on 2026-10-19: [train](https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/train.csv) and [test](https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/test.csv). The header is `text,category`; text fields are quoted where necessary. The [Hugging Face metadata](https://huggingface.co/datasets/PolyAI/banking77/blob/main/dataset_infos.json) independently describes the 77 labels and official split sizes. These sizes have not yet been independently counted by the local preparation run; the loader checks them before accepting data.
+The actual upstream CSV URLs were reachable through web inspection on 2026-10-19: [train](https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/train.csv) and [test](https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/master/banking_data/test.csv). The header is `text,category`; text fields are quoted where necessary. The [Hugging Face metadata](https://huggingface.co/datasets/PolyAI/banking77/blob/main/dataset_infos.json) independently describes the 77 labels and official split sizes. The completed local preparation run verified these source sizes and saved their revision and SHA-256 hashes.
 
 The upstream [LICENSE](https://github.com/PolyAI-LDN/task-specific-datasets/blob/master/LICENSE) is **Creative Commons Attribution 4.0 International**. Preserve attribution, link the license, indicate modifications (this project filters overlap/conflicts and creates validation partitions), and do not imply endorsement. See [license terms](https://creativecommons.org/licenses/by/4.0/). No paid service is required. Dataset license applies to the data; it does not automatically license pretrained weights or your code. The selected [DistilBERT model card](https://huggingface.co/distilbert/distilbert-base-uncased) declares Apache-2.0. Keep the model notices with redistributed artifacts.
 
@@ -32,7 +56,7 @@ data/ artifacts/        generated locally, ignored by Git
 
 ## Setup (Windows PowerShell)
 
-Python 3.10–3.12 is recommended for broad wheel availability. An isolated environment avoids changing your existing installation. The inspected host has 12 logical CPUs, approximately 15.7 GiB RAM and an NVIDIA RTX 3050 laptop GPU with 6 GiB VRAM; its current global PyTorch is CPU-only. An attempted CUDA environment install was blocked by the download approval service, so GPU execution is **unverified**.
+Python 3.10–3.12 is recommended for broad wheel availability. An isolated environment avoids changing your existing installation. Completed training used **Python 3.10.11, PyTorch 2.11.0+cu128, and an NVIDIA GeForce RTX 3050 6GB Laptop GPU**. The inspected host has 12 logical CPUs and approximately 15.7 GiB RAM. The separate global Python installation was CPU-only; activate the project environment to use CUDA.
 
 ```powershell
 py -3.10 -m venv .venv
@@ -45,7 +69,7 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 python -m pytest -q
 ```
 
-For CPU, install PyTorch using the [official installation selector](https://pytorch.org/get-started/locally/) before the editable install. Training automatically uses CUDA when available. The full default batch is 8 on CUDA / 4 on CPU with two accumulation steps, maximum 96 tokens, FP32, no DataLoader workers. If GPU memory runs out, reduce `batch_size_cuda` to 4 or 2 before preparation and increase accumulation to preserve the effective batch. This is a practical starting point, not a verified VRAM guarantee. Do not change settings after seeing test results.
+For CPU, install PyTorch using the [official installation selector](https://pytorch.org/get-started/locally/) before the editable install. Training automatically uses CUDA when available. The completed full GPU run used batch size 8 with two accumulation steps, maximum 96 tokens, FP32, and no DataLoader workers. The CPU default is batch size 4. If GPU memory runs out on another machine, reduce `batch_size_cuda` to 4 or 2 before preparation and increase accumulation to preserve the effective batch. Do not change settings after seeing test results.
 
 Dependency ranges are in `pyproject.toml`. `reports/local_checks/environment.txt` records the actual environment used for completed offline checks; it is **not** a validated training lockfile. After a successful install, save `python -m pip freeze > requirements-lock.txt` for your training environment.
 
@@ -59,6 +83,8 @@ python -m ticketnlp.run final --config configs/smoke.json
 ```
 
 Smoke uses all 77 labels but only up to 3 train and 2 validation/test examples per class, one learning rate, one epoch, and at most **6 optimizer steps** for DistilBERT. It still downloads the real pretrained weights and audits the entire dataset first. Expect poor, noisy predictions: this verifies wiring rather than learning quality. Smoke and full data/artifacts/reports have distinct directories. Smoke models identify their mode in API responses.
+
+Smoke mode completed successfully, but its model scores are not portfolio performance results; use the full-training table above.
 
 ## Full experiment
 
@@ -81,6 +107,16 @@ NFKC normalization, case folding, punctuation removal, and whitespace normalizat
 Preserve the official test partition except for conflicting-label components, which are quarantined from all partitions. Remove official training examples whose component touches test. Split remaining training data with seeded five-fold stratified group splitting; one fold (~20%) becomes validation. Whole groups stay together, even across different intent labels. Fail if a class disappears from any partition. Exact source, removal counts, components, and per-class counts are saved in the audit. Therefore results are **not directly comparable** with published unfiltered BANKING77 benchmarks. Test-internal repetitions can remain and overweight repeated queries; document their audit counts when reporting results.
 
 Both models consume the same saved row IDs, labels, and partitions. Only training fits the TF-IDF vocabulary/IDF and classifier. DistilBERT uses its pretrained tokenizer and only training examples update weights. Neither evaluation split is used to fit preprocessing. Fixed seed 42 controls split generation, initial classification head, and shuffling; GPU/library differences can still change numerical results.
+
+The completed audit used source revision `57ec275d8078af65b7731c2a98be812d844a6d6b`. It found **60 normalized duplicate rows**, **1,962 similarity pairs**, and **50 conflicting-label components**. Removing official training rows whose component touches test excluded 839 rows; quarantining conflicting-label components further changed both populations. The resulting shared partitions were:
+
+| Partition | Examples |
+|---|---:|
+| Training | 7,296 |
+| Validation | 1,810 |
+| Test | 3,020 |
+
+The review verified disjoint saved component IDs across these partitions; it did not recompute the full pairwise similarity audit. The lexical threshold does not guarantee removal of all semantic paraphrases.
 
 ### Selection and final results
 
@@ -107,6 +143,14 @@ Requests must contain a string with 1–4,000 characters and at least one non-wh
 
 ## Limits and next steps
 
-English banking domain only, closed-set single-label output, no unknown/abstention class, no calibrated thresholds, and no conversation context. Related intents and short ambiguous messages can be difficult. No actual failure pattern is asserted until error files are inspected. Full benchmark metrics and an API runtime check remain pending in the current delivery. Read `docs/INTERVIEW_GUIDE.md` and `reports/RESUME_BULLETS.md` before describing the work in interviews.
+English banking domain only, closed-set single-label output, no unknown/abstention class, no calibrated thresholds, and no conversation context. Related intents and short ambiguous messages remain difficult, even though DistilBERT improves overall performance.
+
+Concrete findings from the saved test errors:
+
+- **Virtual-card troubleshooting is a major weakness.** Only 23 training and 7 validation examples remain for `virtual_card_not_working`. DistilBERT recognizes 2 of 39 test examples (5.13% recall; F1 0.0976), compared with 14 of 39 for the baseline (F1 0.5283). DistilBERT sends 18 to `getting_virtual_card` and 16 to `get_disposable_virtual_card`. Low training coverage is a plausible contributor, not a proven cause.
+- **Related intent labels are confused.** DistilBERT predicts `verify_my_identity` for 10 `why_verify_identity` queries and makes the reverse error 7 times. Card-arrival queries are sometimes classified as delivery-estimate requests. Short messages may not provide enough context to distinguish these labels.
+- **High scores can still be wrong.** A query about the exchange rate applied to a transaction (`test-156`) receives the general `exchange_rate` label instead of `card_payment_wrong_exchange_rate`, with score approximately 0.918. This illustrates a mistake with a high score; it does not replace a calibration study.
+
+The initial offline verification recorded **5 tests passed and 1 API test module skipped**. A later test run in the training environment stalled and was interrupted; real-model API serving remains unverified. Next steps are to resolve that test stall, exercise the API with the trained model, and update the older interview/experiment/resume documents. Preserve the current final test results. Additional model selection should use validation; any unbiased new claim motivated by inspected test errors needs a fresh holdout.
 
 Implementation references: [Hugging Face sequence classification](https://huggingface.co/docs/transformers/tasks/sequence_classification), [DistilBERT](https://huggingface.co/docs/transformers/model_doc/distilbert), [PyTorch reproducibility](https://docs.pytorch.org/docs/stable/notes/randomness.html), [scikit-learn group splitting](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html), and [FastAPI lifespan](https://fastapi.tiangolo.com/advanced/events/).
